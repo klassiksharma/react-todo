@@ -20,7 +20,7 @@ function renderTodo({ todo, handleTodoClick }) {
 }
 
 function Heading({ title }) {
-  return <h2 className="text-center my-10">{title}</h2>;
+  return <h2 className="text-center my-10 font-bold">{title}</h2>;
 }
 
 function renderTodoShimmer() {
