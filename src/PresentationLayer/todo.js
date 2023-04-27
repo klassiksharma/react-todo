@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import fetchTodoList from "../ApiLayer/todoApi";
 import filterTodo from "../BusinessLayer/filterTodos";
 
@@ -12,7 +12,7 @@ function renderTodo({ todo, handleTodoClick }) {
         id={`checkbox-${todo.id}`}
         className="mr-4 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
       />
-      <label for={`checkbox-${todo.id}`} className="w-full cursor-pointer">
+      <label htmlFor={`checkbox-${todo.id}`} className="w-full cursor-pointer">
         {todo.todo}
       </label>
     </div>
@@ -25,9 +25,17 @@ function Heading({ title }) {
 
 function renderTodoShimmer() {
   return (
-    <div className="animate-pulse flex items-center space-x-4 p-5">
-      <div className="h-10 w-full bg-indigo-300 rounded"></div>
-    </div>
+    <Fragment>
+      <div className="animate-pulse flex items-center space-x-4 p-5">
+        <div className="h-10 w-full bg-indigo-300 rounded"></div>
+      </div>
+      <div className="animate-pulse flex items-center space-x-4 p-5">
+        <div className="h-10 w-full bg-indigo-300 rounded"></div>
+      </div>
+      <div className="animate-pulse flex items-center space-x-4 p-5">
+        <div className="h-10 w-full bg-indigo-300 rounded"></div>
+      </div>
+    </Fragment>
   );
 }
 
@@ -36,6 +44,8 @@ function TodoList() {
   const [completedTodos, setcompletedTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    // This API is being called twice in dev enviornment due to 
+    // https://legacy.reactjs.org/docs/strict-mode.html#ensuring-reusable-state
     fetchTodoList()
       .then((data) => {
         const [open, completed] = filterTodo(data);
@@ -56,10 +66,10 @@ function TodoList() {
     setcompletedTodos(updatedCompleted);
   };
   return (
-    <div class="container mx-auto py-20">
+    <div className="container mx-auto py-20">
       <div>
         <Heading title="I did it!" />
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 bg-lightGreen p-20">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 bg-lightGreen p-20">
           {completedTodos.map((item) => (
             <div
               key={item.id}
@@ -75,11 +85,7 @@ function TodoList() {
         <Heading title="To Do" />
         <div className="border-8 border-gray">
           {loading ? (
-            <div>
-              {renderTodoShimmer()}
-              {renderTodoShimmer()}
-              {renderTodoShimmer()}
-            </div>
+            renderTodoShimmer()
           ) : (
             todos.map((todo) => renderTodo({ todo, handleTodoClick }))
           )}

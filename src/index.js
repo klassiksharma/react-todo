@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// Using Strictmode will cause some unexpected issues in dev enviornment in React 18.
+// https://react.dev/learn/synchronizing-with-effects
 root.render(
   <React.StrictMode>
     <App />
